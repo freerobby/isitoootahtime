@@ -1,51 +1,72 @@
 require 'rubygems'
+require 'bundler/setup'
+
+require 'action_view'
 require 'sinatra'
+
+include ActionView::Helpers::DateHelper
 
 CREDITS = '
   <!--
-    Site by Robby Grossman (http://freerobby.com).
+    Site by Robby Grossman (http://rob.by).
     Unicorns supplied by Cornify (http://cornify.com).
-    Project is open-sourced on github (http://github.com/freerobby/didtheypasshealthcarereform)
+    Project is open-sourced on github (http://github.com/freerobby/isitootahtime)
   -->
 '
 
 HEADER = '
 <html>
   <head>
-    <title>Did they pass health care reform?</title>
+    <title>Is it Oootah time?</title>
   </head>
   <body>
 '
 
-GA = '
-  <script type="text/javascript">
-  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-  document.write(unescape("%3Cscript src=\'" + gaJsHost + "google-analytics.com/ga.js\' type=\'text/javascript\'%3E%3C/script%3E"));
-  </script>
-  <script type="text/javascript">
-  try {
-  var pageTracker = _gat._getTracker("UA-15385027-1");
-  pageTracker._trackPageview();
-  } catch(err) {}</script>
-'
+GA = <<-EOS
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-46759284-1', 'isitoootahtime.herokuapp.com');
+  ga('send', 'pageview');
+
+</script>
+EOS
 
 FOOTER = '
   </body>
 </html>
 '
 
-NO = HEADER + '<div style="text-align: center; font-size: 6em;">no</div>' + GA + FOOTER + CREDITS
+NO = <<-EOS
+  #{HEADER}
+  <div id="no" style="text-align: center; font-size: 6em;">not yet.</div><div id="details" style="text-align: center; display: block; margin-top: 50px;">{}</div>
+  #{GA}
+  #{FOOTER}
+  #{CREDITS}
+EOS
 
-YES = HEADER + '
-<div style="text-align: center; font-size: 6em;">yes!</div>
-<script type="text/javascript" src="/cornify.js"></script>
-<script language="javascript">
-  for (var i = 0; i < 10; i++) {
-    cornify_add();
-  }
-</script>
-' + GA + FOOTER + CREDITS
+YES = <<-EOS
+  #{HEADER}
+  <div id="yes" style="text-align: center; font-size: 6em;">yes!</div>
+  <script type="text/javascript" src="/cornify.js"></script>
+  <script language="javascript">
+    for (var i = 0; i < 10; i++) {
+      cornify_add();
+    }
+  </script>
+  #{GA}
+  #{FOOTER}
+  #{CREDITS}
+EOS
 
 get '/' do
-  YES
+  oootah_at = Time.new(2014, 1, 4)
+  if Time.now >= oootah_at
+    YES
+  else
+    NO.gsub('{}', distance_of_time_in_words_to_now(oootah_at, include_seconds: true))
+  end
 end
