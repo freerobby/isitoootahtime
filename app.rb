@@ -2,6 +2,8 @@ require 'rubygems'
 require 'bundler/setup'
 
 require 'action_view'
+require 'active_support/all'
+require 'dotiw'
 require 'sinatra'
 
 include ActionView::Helpers::DateHelper
@@ -67,6 +69,6 @@ get '/' do
   if Time.now >= oootah_at
     YES
   else
-    NO.gsub('{}', distance_of_time_in_words_to_now(oootah_at, include_seconds: true))
+    NO.gsub('{}', distance_of_time_in_words_to_now(oootah_at))
   end
 end
