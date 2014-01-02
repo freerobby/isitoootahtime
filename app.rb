@@ -78,6 +78,6 @@ get '/' do
   if Time.now >= oootah_at
     YES
   else
-    NO.gsub('{}', distance_of_time_in_words_to_now(oootah_at))
+    NO.gsub('{}', distance_of_time_in_words_to_now(oootah_at).gsub(', and', ' and')) # Oxford comma sucks.
   end
 end
