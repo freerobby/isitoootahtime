@@ -8,13 +8,22 @@ require 'sinatra'
 
 include ActionView::Helpers::DateHelper
 
-CREDITS = '
+CREDITS_YES = <<-EOS
   <!--
     Site by Robby Grossman (http://rob.by).
     Unicorns supplied by Cornify (http://cornify.com).
     Project is open-sourced on github (http://github.com/freerobby/isitootahtime)
   -->
-'
+EOS
+
+
+CREDITS_NO = <<-EOS
+  <!--
+    Site by Robby Grossman (http://rob.by).
+    Project is open-sourced on github (http://github.com/freerobby/isitootahtime)
+  -->
+EOS
+  
 
 HEADER = '
 <html>
@@ -47,7 +56,7 @@ NO = <<-EOS
   <div id="no" style="text-align: center; font-size: 6em;">not yet.</div><div id="details" style="text-align: center; display: block; margin-top: 50px;">{}</div>
   #{GA}
   #{FOOTER}
-  #{CREDITS}
+  #{CREDITS_NO}
 EOS
 
 YES = <<-EOS
@@ -61,7 +70,7 @@ YES = <<-EOS
   </script>
   #{GA}
   #{FOOTER}
-  #{CREDITS}
+  #{CREDITS_YES}
 EOS
 
 get '/' do
