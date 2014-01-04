@@ -74,7 +74,7 @@ YES = <<-EOS
 EOS
 
 get '/' do
-  oootah_at = Time.new(2014, 1, 4)
+  oootah_at = Time.new(2014, 1, 3)
   if Time.now >= oootah_at
     YES
   else
